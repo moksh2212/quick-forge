@@ -10,22 +10,12 @@ const app = express();
 
 await connectCloudinary();
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || origin.endsWith(".vercel.app") || origin === "http://localhost:5173") {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
-
-// ✅ enable CORS for all routes
-app.use(cors(corsOptions));
-
-// ✅ optional: handle preflight explicitly (without breaking path-to-regexp)
-app.options(/.*/, cors(corsOptions));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(clerkMiddleware());
 
