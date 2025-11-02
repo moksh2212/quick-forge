@@ -12,14 +12,21 @@ await connectCloudinary();
 
 app.use(
   cors({
-    origin: [
-      "https://quick-forge-zckf-pyxu222gt-moksh2212s-projects.vercel.app",
-      "https://quick-forge-nc4hzfmho-moksh2212s-projects.vercel.app",
-      "http://localhost:5173",
-    ],
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        origin.endsWith(".vercel.app") ||
+        origin === "http://localhost:5173"
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
